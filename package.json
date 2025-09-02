@@ -1,4 +1,17 @@
 {
   "name": "depmap",
-  "packageManager": "yarn@4.9.2"
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/src"
+  },
+  "packageManager": "yarn@4.9.2",
+  "dependencies": {
+    "@types/node": "^24.3.0",
+    "cytoscape": "^3.33.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
+  }
 }
