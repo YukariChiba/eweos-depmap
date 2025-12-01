@@ -1,8 +1,9 @@
+import { Command } from 'commander';
 import bygroup from './bygroup';
 import bylist from './bylist';
-import help from './help';
+import bypreset from './bypreset';
+import listpresets from './listpresets';
 
-const cmdlist: BaseCommand[] = [bygroup, bylist, help];
-const defaultcmd = help;
+const cmdlist: Command[] = [bygroup, bylist, bypreset, listpresets];
 
-export { cmdlist, defaultcmd };
+export default cmdlist;

@@ -1,8 +1,11 @@
-import fs from "fs/promises";
-import path from "path";
-import { normalizeDepName } from "./pkginfo";
+import fs from 'fs/promises';
+import path from 'path';
+import { normalizeDepName } from './pkginfo';
 
-async function init(workflow_dir: string, repos = ["main", "testing"]) {
+async function init(
+  workflow_dir: string = 'workflow',
+  repos = ['main', 'testing'],
+): Promise<BaseData> {
   let allFiles = [];
   for (const subdir of repos) {
     const dir = `${workflow_dir}/${subdir}`;
@@ -11,9 +14,9 @@ async function init(workflow_dir: string, repos = ["main", "testing"]) {
       const filteredFiles = filesInDir
         .filter(
           (file) =>
-            file.endsWith(".json") &&
-            !file.startsWith("_") &&
-            !file.endsWith(".files.json"),
+            file.endsWith('.json') &&
+            !file.startsWith('_') &&
+            !file.endsWith('.files.json'),
         )
         .map((file) => path.join(dir, file));
       allFiles.push(...filteredFiles);
@@ -23,7 +26,7 @@ async function init(workflow_dir: string, repos = ["main", "testing"]) {
   }
   const allPackages = await Promise.all(
     allFiles.map(async (file) => {
-      const content = await fs.readFile(file, "utf8");
+      const content = await fs.readFile(file, 'utf8');
       return JSON.parse(content);
     }),
   );

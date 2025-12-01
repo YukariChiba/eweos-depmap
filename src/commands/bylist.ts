@@ -1,19 +1,17 @@
-import { calcBuildOrder, genDependencyGraphByList } from '../utils/graph';
+import DepGraph from '../utils/depgraph';
+import init from '../utils/init';
+import GraphCommand from './base';
 
-function anal(baseData: BaseData, packageList: Set<string>) {
-  let elems = [];
-  elems = genDependencyGraphByList(baseData, packageList);
-
+const cmdfn = async (pkgs: string[], options?: GraphConfig) => {
+  const baseData: BaseData = await init();
+  const graph = new DepGraph(baseData, new Set(pkgs), options);
   console.log(`Build Order for packages: `);
-  calcBuildOrder(elems);
-}
-
-const cmd: BaseCommand = {
-  command: 'bylist',
-  description: 'Generate build order for a list of packages',
-  eval: (baseData: BaseData, args: string[]) => {
-    anal(baseData, new Set(args));
-  },
+  DepGraph.buildorder(graph.dependencyGraph);
 };
+
+const cmd = new GraphCommand('bylist')
+  .description('generate build order for a list of packages')
+  .argument('<pkgs...>')
+  .action(cmdfn);
 
 export default cmd;

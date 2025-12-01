@@ -1,0 +1,17 @@
+{
+  "no_makedepends": [
+    "python-packaging",
+    "python-build", 
+    "python-jaraco.collections",
+    "python-jaraco.context",
+    "python-jaraco.functools",
+    "python-jaraco.text",
+    "python-platformdirs",
+    "python-installer",
+    "python-inflect",
+    "python-autocommand",
+    "python-typeguard",
+    "python-pyproject-hooks"
+  ],
+  "remove_depends": {}
+}

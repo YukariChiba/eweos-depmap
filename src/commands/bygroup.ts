@@ -1,8 +1,10 @@
-import { calcBuildOrder, genDependencyGraphByGroup } from '../utils/graph';
+import DepGraph from '../utils/depgraph';
+import init from '../utils/init';
+import GraphCommand from './base';
 
-function anal(baseData: BaseData, searchGroup: string) {
+function anal(baseData: BaseData, searchGroup?: GroupName, options?: GraphConfig) {
   let elems = [];
-  const fullDependencyGraph = genDependencyGraphByGroup(baseData);
+  const fullDependencyGraph = DepGraph.fromGroup(baseData, options);
   if (!fullDependencyGraph.has(searchGroup)) {
     console.log('Fail. Group not exists.');
     return;
@@ -10,19 +12,18 @@ function anal(baseData: BaseData, searchGroup: string) {
   elems = fullDependencyGraph.get(searchGroup);
 
   console.log(`Build Order for group ${searchGroup}: `);
-  calcBuildOrder(elems);
+  DepGraph.buildorder(elems);
 }
 
-const cmd: BaseCommand = {
-  command: 'bygroup',
-  description: "Generate build order for a pkg group",
-  eval: (baseData: BaseData, args: string[]) => {
-    if (args.length == 0) {
-      for (const grp of baseData.groupsMap.keys()) anal(baseData, grp);
-    } else {
-      anal(baseData, args[0]);
-    }
-  },
+const cmdfn = async (group?: string, options?: GraphConfig) => {
+  const baseData: BaseData = await init();
+  if (group) anal(baseData, group, options);
+  else for (const grp of baseData.groupsMap.keys()) anal(baseData, grp, options);
 };
+
+const cmd = new GraphCommand('bygroup')
+  .description('generate build order for a pkg group')
+  .argument('[group]', 'package group name, leave blank to check all groups')
+  .action(cmdfn);
 
 export default cmd;

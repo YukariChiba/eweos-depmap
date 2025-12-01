@@ -9,7 +9,7 @@
     "outDir": "dist",
     "baseUrl": "src",
     "rootDir": "./",
-    //"resolveJsonModule": true,
+    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true

@@ -1,20 +1,14 @@
-import init from './utils/init';
+import { Command } from 'commander';
+import cmdlist from './commands';
 
-import { cmdlist, defaultcmd } from './commands';
+const program = new Command();
 
-const WORKFLOW_DIR = 'workflow';
+program.version('1.0.0').description('eweOS dependency mapping program');
 
-async function main(args: string[]) {
-  const baseData = await init(WORKFLOW_DIR);
-  let func = defaultcmd;
-  for (let f of cmdlist) {
-    if (f.command == args[0]) {
-      func = f;
-      break;
-    }
-  }
-  func.eval(baseData, args.slice(1));
+async function main() {
+  for (const cmd of cmdlist) program.addCommand(cmd);
+
+  program.parse(process.argv);
 }
 
-const args = process.argv.slice(2);
-main(args);
+main();
