@@ -1,24 +1,39 @@
 import DepGraph from '../utils/depgraph';
 import init from '../utils/init';
 import GraphCommand from './base';
+import { BaseData, GraphConfig, GroupName, mkGroupName } from '../utils/types';
 
-function anal(baseData: BaseData, searchGroup?: GroupName, options?: GraphConfig) {
-  let elems = [];
+function anal(
+  baseData: BaseData,
+  searchGroup: GroupName,
+  options: GraphConfig,
+) {
   const fullDependencyGraph = DepGraph.fromGroup(baseData, options);
-  if (!fullDependencyGraph.has(searchGroup)) {
+
+  if (!searchGroup || !fullDependencyGraph.has(searchGroup)) {
     console.log('Fail. Group not exists.');
     return;
   }
-  elems = fullDependencyGraph.get(searchGroup);
+  const elems = fullDependencyGraph.get(searchGroup);
 
-  console.log(`Build Order for group ${searchGroup}: `);
+  if (!elems) {
+    console.log('Fail. Graph generation failed.');
+    return;
+  }
+
+  console.log(`Build Order for group ${searchGroup.data}: `);
   DepGraph.buildorder(elems);
 }
 
 const cmdfn = async (group?: string, options?: GraphConfig) => {
   const baseData: BaseData = await init();
-  if (group) anal(baseData, group, options);
-  else for (const grp of baseData.groupsMap.keys()) anal(baseData, grp, options);
+  if (options == undefined) {
+    console.log('Fail. Empty options.');
+    return;
+  }
+  if (group) anal(baseData, mkGroupName(group), options);
+  else
+    for (const grp of baseData.groupsMap.keys()) anal(baseData, grp, options);
 };
 
 const cmd = new GraphCommand('bygroup')

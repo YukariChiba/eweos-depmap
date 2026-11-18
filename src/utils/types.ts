@@ -1,40 +1,87 @@
-interface BaseData {
+export enum DataType {
+  PackageName = 'PackageName',
+  PackageBase = 'PackageBase',
+  GroupName = 'GroupName',
+  ProvideName = 'ProvideName',
+}
+
+export interface TypedData {
+  type: DataType;
+  data: string;
+}
+
+export interface PackageName extends TypedData {
+  type: DataType.PackageName;
+}
+export interface PackageBase extends TypedData {
+  type: DataType.PackageBase;
+}
+export interface GroupName extends TypedData {
+  type: DataType.GroupName;
+}
+export interface ProvideName extends TypedData {
+  type: DataType.ProvideName;
+}
+
+const internCache = new Map<string, TypedData>();
+
+function getInterned<T extends TypedData>(type: DataType, data: string): T {
+  const key = `${type}:${data}`;
+
+  if (!internCache.has(key)) {
+    internCache.set(key, { type, data });
+  }
+
+  return internCache.get(key) as T;
+}
+
+export const mkPkgName = (data: string): PackageName =>
+  getInterned<PackageName>(DataType.PackageName, data);
+
+export const mkPkgBase = (data: string): PackageBase =>
+  getInterned<PackageBase>(DataType.PackageBase, data);
+
+export const mkGroupName = (data: string): GroupName =>
+  getInterned<GroupName>(DataType.GroupName, data);
+
+export const mkProvideName = (data: string): ProvideName =>
+  getInterned<ProvideName>(DataType.ProvideName, data);
+
+export interface BaseData {
   contentMap: Map<PackageName, any>;
-  baseMap: Map<PackageBase, PackageName>;
-  groupsMap: Map<PackageName, Set<GroupName>>;
+  baseMap: Map<PackageName, PackageBase>;
+  groupsMap: Map<GroupName, Set<PackageName>>;
   providesMap: Map<ProvideName, PackageName>;
 }
 
-interface BaseCommandEval {
+export interface BaseCommandEval {
   (baseData: BaseData, args: string[]): void;
 }
 
-interface BaseCommand {
+export interface BaseCommand {
   command: string;
   description?: string;
   eval: BaseCommandEval;
 }
 
-interface PackageName extends String {}
-interface PackageBase extends String {}
-interface GroupName extends String {}
-interface ProvideName extends String {}
+export type IgnoreList = Record<string, string[]>;
 
-type IgnoreList = Record<string, string[]>;
-interface PackagesPreset {
+export interface PackagesPreset {
   description?: string;
-  groups?: GroupName[];
-  packages?: PackageName[];
+  groups?: string[];
+  packages?: string[];
 }
-type PackagesPresets = Record<string, PackagesPreset>;
+export type PackagesPresets = Record<string, PackagesPreset>;
 
-type GraphConfig = {
+export type GraphConfig = {
   ignorelist: boolean;
   checkdepends: boolean;
   bootstrap: boolean;
+  baseDevel: boolean;
+  base: boolean;
 };
 
-type BootstrapConfig = {
+export type BootstrapConfig = {
   no_makedepends: string[];
   remove_depends: Record<string, string[]>;
 };

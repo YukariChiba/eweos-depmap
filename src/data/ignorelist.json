@@ -1,3 +1,4 @@
 {
-  "plasma-workspace": ["plasma-integration"]
+  "plasma-workspace": ["plasma-integration"],
+  "flatpak": ["xdg-desktop-portal"]
 }

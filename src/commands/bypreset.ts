@@ -2,6 +2,14 @@ import DepGraph from '../utils/depgraph';
 import init from '../utils/init';
 import GraphCommand from './base';
 import presetsobj from '../data/presets.json';
+import {
+  BaseData,
+  GraphConfig,
+  mkGroupName,
+  mkPkgName,
+  PackageName,
+  PackagesPresets,
+} from '../utils/types';
 
 const cmdfn = async (preset: string, options: GraphConfig) => {
   const presets: PackagesPresets = presetsobj;
@@ -13,16 +21,16 @@ const cmdfn = async (preset: string, options: GraphConfig) => {
   }
 
   const baseData: BaseData = await init();
-  const finalPackageList = new Set<string>();
+  const finalPackageList = new Set<PackageName>(); // Set of strings
 
   if (targetPreset.packages) {
-    targetPreset.packages.forEach((p) => finalPackageList.add(p.toString()));
+    targetPreset.packages.forEach((p) => finalPackageList.add(mkPkgName(p)));
   }
   if (targetPreset.groups) {
     for (const grp of targetPreset.groups) {
-      const groupPkgs = baseData.groupsMap.get(grp);
+      const groupPkgs = baseData.groupsMap.get(mkGroupName(grp));
       if (groupPkgs) {
-        groupPkgs.forEach((p) => finalPackageList.add(p.toString()));
+        groupPkgs.forEach((p) => finalPackageList.add(p));
       }
     }
   }

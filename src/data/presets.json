@@ -1,7 +1,71 @@
 {
+  "qt6": {
+    "description": "",
+    "groups": ["qt6"],
+    "packages": ["qt6-base", "qt6-imageformats"]
+  },
+  "qt6-rebuild": {
+    "description": "",
+    "groups": ["qt6"],
+    "packages": [
+      "qt6-base",
+      "qt6-imageformats",
+      "fcitx5-qt",
+      "gstreamer",
+      "kcolorscheme",
+      "kconfigwidgets",
+      "kde-cli-tools",
+      "kguiaddons",
+      "kiconthemes",
+      "kio",
+      "kirigami",
+      "kpipewire",
+      "kscreen",
+      "kwayland",
+      "kwindowsystem",
+      "kxmlgui",
+      "layer-shell-qt",
+      "libfm-qt",
+      "libkscreen",
+      "libplasma",
+      "libportal",
+      "libqtxdg",
+      "lxqt-panel",
+      "lxqt-qtplugin",
+      "telegram-desktop",
+      "xdg-desktop-portal-lxqt",
+      "pyside6",
+      "qcoro"
+    ]
+  },
   "lxqt": {
     "description": "",
     "groups": ["lxqt"],
-    "packages": []
+    "packages": [
+      "liblxqt",
+      "libqtxdg",
+      "lxqt-build-tools",
+      "libfm-qt",
+      "lxqt-menu-data",
+      "qtermwidget",
+      "qtxdg-tools",
+      "libdbusmenu-lxqt"
+    ]
+  },
+  "hyprland": {
+    "description": "",
+    "groups": [],
+    "packages": [
+      "hyprland",
+      "hyprlang",
+      "hyprcursor",
+      "hyprgraphics",
+      "hyprland-protocols",
+      "hyprpicker",
+      "hyprutils",
+      "hyprwayland-scanner",
+      "hyprwire",
+      "aquamarine"
+    ]
   }
 }

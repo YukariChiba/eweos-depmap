@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import presetsobj from '../data/presets.json';
+import { PackagesPresets } from '../utils/types';
 
 const cmdfn = async () => {
   const presets: PackagesPresets = presetsobj;

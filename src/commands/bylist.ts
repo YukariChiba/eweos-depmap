@@ -1,10 +1,15 @@
+import { BaseData, GraphConfig, mkPkgName } from '../utils/types';
 import DepGraph from '../utils/depgraph';
 import init from '../utils/init';
 import GraphCommand from './base';
 
 const cmdfn = async (pkgs: string[], options?: GraphConfig) => {
   const baseData: BaseData = await init();
-  const graph = new DepGraph(baseData, new Set(pkgs), options);
+  const graph = new DepGraph(
+    baseData,
+    new Set(pkgs.map((i) => mkPkgName(i))),
+    options,
+  );
   console.log(`Build Order for packages: `);
   DepGraph.buildorder(graph.dependencyGraph);
 };

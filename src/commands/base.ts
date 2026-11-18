@@ -7,8 +7,19 @@ class GraphCommand extends Command {
       '--no-ignorelist',
       'do not use ignorelist to resolve dependency loop',
     );
-    this.option('--bootstrap', 'enable extra bootstrapping path (also sets --no-checkdepends)');
+    this.option(
+      '--bootstrap',
+      'enable extra bootstrapping path (also sets --no-checkdepends)',
+    );
     this.option('--no-checkdepends', 'ignore checkdepends');
+    this.option(
+      '--no-base',
+      'ignore packages in "base" group and their dependencies',
+    );
+    this.option(
+      '--no-base-devel',
+      'ignore packages in "base" and "base-devel" groups and their dependencies',
+    );
   }
 }
 

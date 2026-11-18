@@ -1,6 +1,15 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { normalizeDepName } from './pkginfo';
+import {
+  BaseData,
+  mkPkgName,
+  mkPkgBase,
+  mkGroupName,
+  mkProvideName,
+  GroupName,
+  PackageName,
+} from './types';
 
 async function init(
   workflow_dir: string = 'workflow',
@@ -30,23 +39,32 @@ async function init(
       return JSON.parse(content);
     }),
   );
-  const contentMap = new Map(allPackages.map((pkg) => [pkg.NAME, pkg]));
-  const baseMap = new Map(allPackages.map((pkg) => [pkg.NAME, pkg.BASE]));
-  const groupsMap = new Map();
-  const providesMap = new Map(allPackages.map((pkg) => [pkg.NAME, pkg.NAME]));
+  const contentMap = new Map(
+    allPackages.map((pkg) => [mkPkgName(pkg.NAME), pkg])
+  );
+  const baseMap = new Map(
+    allPackages.map((pkg) => [mkPkgName(pkg.NAME), mkPkgBase(pkg.BASE)])
+  );
+  const groupsMap = new Map<GroupName, Set<PackageName>>();
+  const providesMap = new Map(
+    allPackages.map((pkg) => [mkProvideName(pkg.NAME), mkPkgName(pkg.NAME)])
+  );
 
   for (const pkg of allPackages) {
     if (pkg.GROUPS) {
-      for (const groupName of pkg.GROUPS) {
-        if (!groupsMap.has(groupName)) {
-          groupsMap.set(groupName, new Set());
+      for (const gName of pkg.GROUPS) {
+        const gObj = mkGroupName(gName);
+        if (!groupsMap.has(gObj)) {
+          groupsMap.set(gObj, new Set());
         }
-        groupsMap.get(groupName).add(pkg.NAME);
+        groupsMap.get(gObj)!.add(mkPkgName(pkg.NAME));
       }
     }
     if (pkg.PROVIDES) {
-      for (const provideName of pkg.PROVIDES)
-        providesMap.set(normalizeDepName(provideName), pkg.NAME);
+      for (const pName of pkg.PROVIDES) {
+        const provideObj = mkProvideName(normalizeDepName(pName));
+        providesMap.set(provideObj, mkPkgName(pkg.NAME));
+      }
     }
   }
   return {
